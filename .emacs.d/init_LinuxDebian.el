@@ -26,8 +26,6 @@
 
 (add-to-list 'desktop-locals-to-save 'evil-markers-alist)
 
-;;(require 'burly)
-;;(counsel-mode 1)
 (require 'compat)
 (require 'multiple-cursors)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
