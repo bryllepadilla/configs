@@ -107,6 +107,14 @@
 
 (evil-global-set-key 'normal (kbd "C-'") 'evil-show-marks)
 
+(defun dg-mark-paragraph ()
+  (interactive)
+  (mark-paragraph)
+  (goto-char (region-beginning))
+  (when (= (string-match paragraph-separate (thing-at-point 'line)) 0)
+    (forward-line)))
+(evil-define-key 'normal 'global (kbd "Y") #'dg-mark-paragraph)
+
 (evil-set-initial-state 'org-mode 'insert)
 (with-eval-after-load 'evil
   (evil-set-initial-state 'Info-mode 'emacs)
