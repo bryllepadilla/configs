@@ -1,0 +1,32 @@
+abbr "fzf_"="print -z -- $(fzf --preview 'bat --color=always {}' --preview-window up:40)"
+abbr "fzfimg_"="print -z -- $(fzf --preview='fzf-preview.sh {}' --preview-window up:40)"
+abbr "fzf1_"="ls < cd ~/%**"
+
+abbr "emacs_"="emacs --daemon && emacsclient -nw"
+
+#abbr 'rsync_'='rsync -a -f"+ */" -f"- *" source destination'
+#SLASHES AT THE END OF BOTH SOURCE AND DESTINATION FOLDER && SLASH AFTER ipaddress:/
+abbr 'rsyncdir_'='rsync -a -f"+ */" -f"- *" /mnt/c/Users/Brylle\ Padilla/Music/from_MediaHuman-LOCAL/005_original_Rock-Metal/ bryllepadilla@192.168.1.18:/home/bryllepadilla/Music/from_MediaHuman-backup/005_original_Rock-Metal/'
+abbr "rsynccp_"="rsync -avz --ignore-existing --progress /mnt/c/Users/Brylle\ Padilla/Music/from_MediaHuman-LOCAL/005_original_Rock-Metal/035_NuMetal bryllepadilla@192.168.1.18:home/bryllepadilla/Music/from_MediaHuman-backup/005_original_Rock-Metal/035_NuMetal"
+
+abbr "sed_"="sed -i '1s/^/%/' <>"
+
+abbr "wslpathu_"="dir=$(wslpath -u "%" | sed 's/\s/\\\\\ /g'); eval cd $dir"
+abbr "zathura_"="open_zathura % | xargs zathura"
+abbr "cd sf_"="cd /mnt/c/Users/Brylle\ Padilla/Projects/salesforce/force-app/main/default/"
+
+abbr "rg_"="rg -l '"%"' | xargs wc -l | sort | column"
+
+abbr "soql_"="sf data query --query \"%\" --target-org VSCodePlayground"
+abbr "apexrun_"="sf apex run -o VSCodePlayground --file % | grep -e EXTERNAL -e DEBUG"
+abbr "sfretrieve_"="sf project retrieve start --metadata CustomObject:% --target-org VSCodePlayground"
+abbr "sfnewclass_"="sf apex generate class --name <YourClass% --output-dir ."
+abbr "sfnewtrigger_"="sf apex generate trigger --name <YourTrigger% --sobject <> --output-dir ."
+abbr "sfdeploy_"="sf project deploy start --source-dir . <YourFile%"
+
+#abbr "emacsclient_"="emacsclient -nw -e '(switch-to-buffer \"*scratch*\")'"
+#abbr "emacsclient_"="emacsclient -nw -e '(split-window-right)'"
+#abbr "emacs_"="emacs --daemon && emacs -nw"
+
+abbr "tree_"="tree ./ | column -c $(tput cols)"
+
