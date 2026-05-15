@@ -43,6 +43,15 @@
       (isearch-yank-string region))))
 (add-hook 'isearch-mode-hook #'c-isearch-with-region)
 
+(defun dg-mark-paragraph ()
+  (interactive)
+  (mark-paragraph)
+  (goto-char (region-beginning))
+  (when (= (string-match paragraph-separate (thing-at-point 'line)) 0)
+    (forward-line)))
+(evil-define-key 'normal 'global (kbd "Y") #'dg-mark-paragraph)
+
+
 (beacon-mode 1)
 (counsel-mode 1)
 
