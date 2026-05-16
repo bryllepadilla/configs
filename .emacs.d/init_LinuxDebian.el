@@ -44,9 +44,10 @@
 (add-hook 'isearch-mode-hook #'c-isearch-with-region)
 
 
-
 (beacon-mode 1)
 (counsel-mode 1)
+(add-to-list 'load-path "/home/bryllepadilla/emacs-libvterm")
+(require 'vterm)
 
 (global-set-key (kbd "M-h") 'windmove-left)
 (global-set-key (kbd "M-j") 'windmove-down)
@@ -167,6 +168,15 @@
 (add-hook 'org-mode-hook #'org-ac/setup-current-buffer)
 (require 'org-tempo)
 (add-to-list 'org-modules 'org-tempo)
+
+(with-eval-after-load 'org
+  (dolist (key '("M-h" "M-j" "M-k" "M-l"))
+    (define-key org-mode-map (kbd key) nil))
+  )
+(with-eval-after-load 'vterm
+  (dolist (key '("M-h" "M-j" "M-k" "M-l"))
+    (define-key vterm-mode-map (kbd key) nil))
+  )
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
