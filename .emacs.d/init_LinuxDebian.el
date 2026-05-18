@@ -13,6 +13,11 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+;;(setq create-lockfiles nil)
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+(require 'buffer-to-pdf)
+(setq buffer-to-pdf-directory (expand-file-name "~/Pictures/Emacs_buffer-to-pdf/"))
+
 (tab-bar-mode 1)
 (tab-bar-history-mode 1)
 (setq desktop-restore-frames t)
@@ -33,8 +38,10 @@
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 
-
-(defun c-isearch-with-region ()
+;; === ISEARCH custom behaviors START
+(setq isearch-allow-scroll t
+      isearch-lazy-count t)
+(defun c-isearch-with-region ()                         ;; === INSTANT mark-all all after isearch
   "Use region as the isearch text."
   (when mark-active
     (let ((region (funcall region-extract-function nil)))
@@ -43,11 +50,43 @@
       (isearch-yank-string region))))
 (add-hook 'isearch-mode-hook #'c-isearch-with-region)
 
+(defun sexp-about-to-isearch ()                         ;; === +/ mark-sexp at cursor about to isearch
+  "Use region as the isearch text."
+  (if isearch-success
+      (progn (mark-sexp))))
+(add-hook 'isearch-mode-hook #'sexp-about-to-isearch)
 
+(defun yankword-after-isearch ()                       ;; === ++/ just yank word, not from where isearch started
+  "Copy the current isearch match to the kill ring."
+  (interactive)
+  (kill-ring-save isearch-other-end (point)))
+  ;;(isearch-exit))                                      ;; == ++// if we rather stay in isearch after yank word
+(define-key isearch-mode-map (kbd "M-w") #'yankword-after-isearch)
+
+(defun my/isearch-extend-right ()
+  "Extend isearch match one char to the right."
+  (interactive)
+  (isearch-yank-char 1))
+(defun my/isearch-shrink-left ()
+  "Shrink isearch match one char from the right."
+  (interactive)
+  (isearch-del-char 1))
+(define-key isearch-mode-map (kbd "<left>")  #'my/isearch-shrink-left)
+(define-key isearch-mode-map (kbd "<right>") #'my/isearch-extend-right)
+;; === ISEACH custom behaviors DONE
+
+(add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+(setq dumb-jump-force-searcher 'rg)                   ;; == LATEST config for dumb-jump_issue, slowness, FIX-restart_emacs
+
+(setq xref-show-definitions-function #'xref-show-definitions-completing-read)      ;; === NOT SURE YET WHICH TO HOLD ON TO
+(add-to-list 'xref-backend-functions 'dumb-jump-xref-activate t)
 (beacon-mode 1)
 (counsel-mode 1)
 (add-to-list 'load-path "/home/bryllepadilla/emacs-libvterm")
 (require 'vterm)
+
+(setq ediff-split-window-function 'split-window-horizontally)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 (global-set-key (kbd "M-h") 'windmove-left)
 (global-set-key (kbd "M-j") 'windmove-down)
@@ -58,16 +97,28 @@
 (global-set-key (kbd "C-c k") 'windmove-swap-states-up)
 (global-set-key (kbd "C-c l") 'windmove-swap-states-right)
 
+(defun copy-rectangle-to-system-clipboard (start end)
+  "Like `copy-rectangle-as-kill', but also copy to system clipboard."
+  (interactive "r")
+  (call-interactively #'copy-rectangle-as-kill)
+  (with-temp-buffer
+    (yank-rectangle)
+    (delete-trailing-whitespace)
+    (kill-new (buffer-string)))
+  )
 
 (tool-bar-mode -1)
+(setq next-line-add-newlines t)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (hl-line-mode 1)
 (global-superword-mode t)
 (global-display-line-numbers-mode t)
+;;(global-hi-lock-mode 1)               ;;(add-hook 'org-mode-hook 'hi-lock-mode)
 
 (load-theme 'base16-black-metal-immortal t)
 (set-frame-font "Iosevka Nerd Font 12" nil t)
+;;(set-face-attribute 'line-number nil :background "black")  ;;for emacsclient issues
 (setq ring-bell-function 'ignore)
 
 (global-set-key (kbd "C-x C-b") #'ibuffer-list-buffers)
@@ -75,10 +126,10 @@
 
 (setq display-buffer-alist nil)
 (add-to-list 'display-buffer-alist
-	     '("\\(info\\|Help\\|TUTORIAL\\|Org Agenda\\|Agenda Commands\\)"
+	     '("\\(info\\|Help\\|TUTORIAL\\|Org Agenda\\|Agenda Commands\\|Occur\\)"
 	       (display-buffer-in-side-window)
 	       (side . left)
-	       (window-width . 0.3))
+	       (window-width . 0.35))
 	     )
 (add-to-list 'display-buffer-alist
 	     '((major-mode . dired-mode)
@@ -98,6 +149,17 @@
 	       (side . bottom)
 	       (window-height . 0.3))
 	     )
+(setq vterm-toggle-fullscreen-p nil)
+(add-to-list 'display-buffer-alist
+             '((lambda (buffer-or-name *vterm*)
+                   (let ((buffer (get-buffer buffer-or-name)))
+                     (with-current-buffer buffer
+                       (or (equal major-mode 'vterm-mode)
+                           (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+               (display-buffer-reuse-window display-buffer-in-side-window)
+               (side . left)
+               (reusable-frames . visible)
+               (window-width . 0.35)))
 
 (setq evil-want-keybinding nil)
 (setq evil-disable-insert-state-bindings t)
@@ -124,6 +186,7 @@
   (evil-set-initial-state 'rg-mode 'normal)
   )
 (define-key evil-normal-state-map (kbd "`") #'window-toggle-side-windows)
+(define-key evil-normal-state-map (kbd "!") #'vterm-toggle-cd)
 (evil-global-set-key 'normal (kbd "C-t") #'tab-new)
 
 (global-set-key (kbd "C-S-t") #'make-frame)
@@ -132,6 +195,16 @@
 (global-set-key (kbd "M-3")
 		(lambda () (interactive) (tab-move -1)))
 (global-set-key (kbd "M-4") 'tab-move)
+(global-set-key (kbd "M-p") 'scroll-down)
+(global-set-key (kbd "M-n") 'scroll-up)
+(global-set-key (kbd "C-M-d") 'evil-scroll-up)
+
+(with-eval-after-load 'evil
+  (dolist (key '("M-." "M-?" "C-f" "C-b" "C-r"))
+    (define-key evil-normal-state-map (kbd key) nil))
+  (dolist (key '("C-f" "C-b"))
+    (define-key evil-motion-state-map (kbd key) nil))
+  )
 
 (setq skippable-buffers '("*Messages*" "*scratch*" "*Help*"))
 (defun my-next-buffer ()
@@ -192,6 +265,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(ivy-current-match ((t (:extend t :background "gray18" :foreground "#aaaaaa"))))
+ '(tab-bar-tab-inactive ((t (:background "gray16" :foreground "#999999")))))
+
 
 
