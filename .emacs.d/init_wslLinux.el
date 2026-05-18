@@ -14,11 +14,6 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;;(require 'workgroups2)
-;;(workgroups-mode 1) 
-;;(global-set-key (kbd "C-x 4") #'wg-create-workgroup)   ;; C-c w s → Save
-;;(global-set-key (kbd "C-x 5") #'wg-open-workgroup)   ;; C-c w s → Save
-;;;;(auto-revert-mode t)
 (tab-bar-mode 1)
 (tab-bar-history-mode 1)
 (setq desktop-restore-frames t)          ; Explicitly restore frames
@@ -33,14 +28,9 @@
 (add-to-list 'savehist-additional-variables 'reader2itemtable)
 
 (require 'burly)
-;;(add-to-list 'savehist-additional-variables 'register-alist)
-;;(add-to-list 'desktop-globals-to-save 'register-alist)
 (add-to-list 'desktop-locals-to-save 'evil-markers-alist)
 
 (counsel-mode 1)
-
-;;(server-start)
-
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -54,13 +44,7 @@
 
 (setq ring-bell-function 'ignore)
 
-;; THEMES
-;;(add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/themes/"))
-;;(load-theme 'nord t)
-;; in ~/.doom.d/config.el
 (load-theme 'base16-black-metal-immortal t)
-;;(setq doom-theme 'doom-Iosvkem)
-;;(set-face-attribute 'default nil :font "Iosevka Nerd Font" :height 120)
 (set-frame-font "Iosevka Nerd Font 12" nil t)
 (set-face-attribute 'line-number nil :background "black")
 
@@ -81,7 +65,6 @@
     (previous-buffer)))
 (global-set-key [remap next-buffer] 'my-next-buffer)
 (global-set-key [remap previous-buffer] 'my-previous-buffer)
-;;(setq switch-to-prev-buffer-skip '("\\*Dired\\*") ;;("\\*dired-mode*")
 
 (with-eval-after-load 'dired
   (evil-set-initial-state 'dired-mode 'normal)   
@@ -95,9 +78,7 @@
     "l" (lambda () (interactive) (dired-find-file)))
   )
 
-;; ANY display-buffer-alist shenanigans
-
-
+;; === DISPLAY BUFFER ALIST ===
 (setq display-buffer-alist nil)
 (add-to-list 'display-buffer-alist
 	     '("\\(info\\|Help\\|TUTORIAL\\|Org Agenda\\|Agenda Commands\\)"
@@ -118,31 +99,8 @@
 	       (display-buffer-below-selected)       ;;display-buffer-full-frame   <-- GOOD FOR testing if regex IS WORKING
                ))
 
-;;(defun display-buffer-from-compilation-p (rg-mode compile-goto-error)
-;;  (unless current-prefix-arg
-;;    (with-current-buffer (window-buffer)
-;;      (derived-mode-p 'compilation-mode))))
-;;(defun display-buffer-clickedLinks-from-org (org-mode org-open-at-mouse)
-;;  (unless current-prefix-arg
-;;    (with-current-buffer (window-buffer)
-;;      (derived-mode-p 'org-mode))))
-;;
-;;(push '(display-buffer-from-compilation-p
-;;        (display-buffer-reuse-mode-window display-buffer-in-side-window)      ;;display-buffer-below-selected
-;;	(side . right)                                                        ;;for display-buffer-in-side-window (side . right)
-;;	(window-width . 0.5))
-;;      display-buffer-alist)
-;;
-;;
-;;(push '(display-buffer-clickedLinks-from-org
-;;        (display-buffer-reuse-mode-window display-buffer-in-side-window)
-;;	(side . right)
-;;	(window-width . 0.5)) 
-;;      display-buffer-alist)     ;;display-buffer-reuse-mode-window display-buffer-below-selected
-	
 
-
-;;DO NOT PUT ANY evil-bindings ABOVE THIS LINE !!
+;; === DO NOT PUT ANY evil-bindings ABOVE THIS LINE !! ===
 
 (setq evil-want-keybinding nil)
 (setq evil-disable-insert-state-bindings t)
@@ -153,10 +111,8 @@
 
 (evil-set-initial-state 'org-mode 'insert)
 (with-eval-after-load 'evil
-  ;;(evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'Info-mode 'emacs)
   (evil-set-initial-state 'help-mode 'emacs)
-  ;;(evil-set-initial-state 'fundamental-mode 'emacs) ;;<- AFFECTS .md files and other unspecified file-types, config-files
   (evil-set-initial-state 'Custom-mode 'emacs)
   )
 (define-key evil-normal-state-map (kbd "`") #'window-toggle-side-windows)   ;;kill-buffer-and-window          ;;delete-window;; to avoid clashing  ;;samsung-tablet #'kill-buffer-and-window
@@ -178,8 +134,6 @@
     (forward-line)))
 (evil-define-key 'normal 'global (kbd "Y") #'dg-mark-paragraph) ;; M-# <- inspired from M-@, since not yet set
 
-;;(global-set-key (kbd "M-1") #'previous-buffer)  ;tab-previous, previous-buffer
-;;(global-set-key (kbd "M-2") #'next-buffer)      ;tab-nextm next-buffer
 (global-set-key (kbd "M-<f1>") 
                 (lambda () (interactive) (tab-move -1)))
 (global-set-key (kbd "M-<f2>") 'tab-move)
@@ -204,7 +158,6 @@
 		       (embark-act)))
 (evil-global-set-key 'normal (kbd "C-'") 'evil-show-marks)
 (setq default-directory "/home/brylle_padilla/")
-;;(setq default-directory "/mnt/c/Users/Brylle Padilla/Documents/emacs_windows/")
 
 (add-to-list 'display-buffer-alist
 	     '((major-mode . evil-list-view-mode)
@@ -230,9 +183,6 @@
             (shell . t)
 		(C . t)
 	    (emacs-lisp . t)
-		
-    ;;(bash . t)
-            ;; Other languages...
             )
 	)
 
@@ -242,8 +192,6 @@
 
 (beacon-mode 1)
 
-;;(set-frame-parameter nil 'alpha 94) ; 94% opacity
-;;(add-to-list 'default-frame-alist '(alpha 94)) ; Or add to default list:
 
 (with-eval-after-load 'org
   (dolist (key '("M-h" "M-j" "M-k" "M-l"))
@@ -271,7 +219,7 @@
     (kill-new (buffer-string)))
   )
 
-;;(windmove-default-keybindings)               ;; IN CONFLICT with org-tables move cell
+;; === WINDMOVE BINDINGS ;; IN CONFLICT with org-tables move cell ===
 (global-set-key (kbd "M-h") 'windmove-left)
 (global-set-key (kbd "M-j") 'windmove-down)
 (global-set-key (kbd "M-k") 'windmove-up)

@@ -21,24 +21,14 @@ alias zjn="zellij -s "
 
 alias sioyek="/mnt/c/Users/Brylle\ Padilla/Downloads/sioyek-release-windows-portable/sioyek-release-windows/sioyek.exe"
 
-#alias cdMusic="echo ''"
 alias lssf="sf org list"
 alias sfupdate="npm update --global @salesforce/cli"
 #abbr -U soql_='sf data query --query "%" --target-org VSCodePlayground'
-#EVERY abbr saved, REFER BACK to ~/.config/zsh-abbr/user-abbreviations
-#DELETE duplicates from list to keep the latest working 
 
 alias fzfp="fzf --preview='less {}'"
 #abbr -U fzf_='ls < cd ~/%**'
+#seq 3 | xargs -I {} touch {}.txt
 
 #abbr -U zathura_='open_zathura % | xargs zathura'
-#alias foliate-='cd /mnt/c/Users/Brylle\ Padilla/foliate && gjs -m src/main.js'
 
-#---============ BASICS STUFF, but needs extra careful checks ==========
 alias mv="mv -i"
-#seq 3 | xargs -I {} touch {}.txt
-#
-
-alias cd_org1="cd /mnt/c/Users/Brylle\ Padilla/Documents/emacs_windows && ls"
-alias cd_org2="cd /mnt/c/Users/Brylle Padilla/Documents/Obsidian2025/0021_Areas📂/004_orgfiles && ls"
-alias cd_toC="cd /mnt/c/Users/Brylle\ Padilla/Documents/emacs_windows/linux-01 && ls"

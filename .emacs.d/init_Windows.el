@@ -39,17 +39,13 @@
 
 (setq ring-bell-function 'ignore)
 (add-to-list 'desktop-globals-to-save 'register-alist)
-;;(add-to-list 'desktop-globals-to-save 'pdf-view-register-alist)
 
 (add-to-list 'desktop-locals-to-save 'pdf-view-register-alist)
 (add-to-list 'savehist-additional-variables 'pdf-view-register-alist)
 (add-to-list 'savehist-additional-variables 'register-alist)
-;;;;     (setq pdf-view-use-dedicated-register t)   ;set via can customize variable ;if the variable exists in your version
-;;;;(add-to-list 'savehist-additional-variables 'pdf-view-with-register-alist)
 
 (setq default-directory "c:/Users/Brylle Padilla/Documents/emacs_windows/")
 (setq desktop-path '("~/.emacs.d/"))
-;;(dired-copy-filename-as-kill 0)
 
 
 (setq skippable-buffers '("*Messages*" "*scratch*" "*Help*")) ;;"\\*Dired\\*" ==WRONG== refer to major-mode
@@ -82,21 +78,10 @@
     "l" (lambda () (interactive) (dired-find-file)))
   )
 
-
-;;(defalias 'dired #'dired-other-window)
 (global-set-key (kbd "C-x d") 'dired-other-window)
 
 (require 'marginalia)
 (marginalia-mode t)
-
-;;-------------------- STARTUP ----------------------
-;;(require 'dashboard)
-;;(setq dashboard-startup-banner 'logo
-;;      dashboard-center-content t
-;;      dashboard-set-file-icons t
-;;      dashboard-set-heading-icons t
-;;      dashboard-set-navigator t
-;;      dashboard-projects-backend 'projectile)   ;; or 'project (buil
 
 
 (setq display-buffer-alist nil)
@@ -135,12 +120,8 @@
 (evil-collection-init)
 
 (with-eval-after-load 'evil
-  ;;(evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'nov-mode 'emacs)
-  ;;(evil-set-initial-state 'pdf-view-mode 'normal)                ;; SIOYEK simulator
   (evil-set-initial-state 'pdf-annot-list-mode 'emacs)
-  ;;(define-key evil-normal-state-map (kbd "q") #'quit-window)   ;; define-key are enclosed under with-eval-after-load
-  ;;(define-key evil-normal-state-map (kbd "q") #'delete-window)   ;; to avoid clashing  ;;samsung-tablet #'kill-buffer-and-window
   (evil-set-initial-state 'Info-mode 'emacs)
   (evil-set-initial-state 'help-mode 'emacs)
   (evil-set-initial-state 'fundamental-mode 'emacs)
@@ -148,8 +129,6 @@
 
 (evil-global-set-key 'normal (kbd "C-t") #'tab-new)
 (global-set-key (kbd "C-S-t") #'make-frame)
-;;(global-set-key (kbd "M-1") #'tab-previous)
-;;(global-set-key (kbd "M-2") #'tab-next)
 (global-set-key (kbd "C-<prior>") #'tab-previous)
 (global-set-key (kbd "C-<next>") #'tab-next)
 (global-set-key (kbd "M-1") #'previous-buffer)  ;tab-previous
@@ -183,8 +162,6 @@
 (load-library "find-lisp")
 (setq org-agenda-files
       (find-lisp-find-files "c:/Users/Brylle Padilla/Documents/emacs_windows/" "\.org$"))
-;;(setq org-agenda-files (directory-files-recursively) "c:/Users/Brylle Padilla/Documents/emacs_windows/" ".org$")
-;;(setq org-agenda-files '("c:/Users/Brylle Padilla/Documents/emacs_windows/"))
 
 (org-babel-do-load-languages
     'org-babel-load-languages
@@ -192,13 +169,10 @@
             (shell . t)
 	    (C . t)
 	    (emacs-lisp . t)
-            ;;(bash . t)
-            ;; Other languages...
         )
    ) 
 
 
-;; Make sure that the bash executable can be found
 (setq explicit-shell-file-name "c:/msys64/usr/bin/bash.exe")
 (setq shell-file-name explicit-shell-file-name)
 (add-to-list 'exec-path "c:/msys64/usr/bin")
@@ -223,18 +197,11 @@
 (require 'pulsar)
 (pulsar-global-mode t)
 
-
-
-;;(require 'kaganawa-theme)
-;;(load-theme 'kaganawa-dragon t)
 (load-theme 'nord t)
 (add-to-list 'custom-theme-load-path (expand-file-name "c:/emacs/.emacs.d/themes"))
-;;(load-theme 'modus-vivendi)
-;;(require 'nordic-night-theme)
 (set-frame-parameter nil 'alpha 94) ; 94% opacity
 (add-to-list 'default-frame-alist '(alpha 94)) ; Or add to default list:
 
-;;(save-place-mode 1) ;;DUPLICATE, use for pdf tools
 (setq doc-view-resolution 150)
 (setq large-file-warning-threshold nil)
 
@@ -264,7 +231,6 @@
     (kill-new (buffer-string)))
   )
 
-;;(windmove-default-keybindings)               ;; IN CONFLICT with org-tables move cell
 (global-set-key (kbd "M-h") 'windmove-left)
 (global-set-key (kbd "M-j") 'windmove-down)
 (global-set-key (kbd "M-k") 'windmove-up)
@@ -276,11 +242,6 @@
 (global-set-key (kbd "C-c <right>") 'windmove-swap-states-right)
 
 (goto-address-mode 1) ;;replace internal header link in org rather to interacting with obsidian uri with mouse click 
-
-;;(add-to-list 'load-path "~/.emacs.d/packages")
-;;(require 'better-registers)
-;;(better-registers-install-save-registers-hook)
-;;(load better-registers-save-file)
 
 (add-hook 'pdf-view-mode-hook 'pdf-view-restore-mode)
 (require 'saveplace-pdf-view)
@@ -294,12 +255,6 @@
     (kbd "S-<backspace>") 'pdf-history-forward
     [backspace] #'pdf-history-backward
     [tab] #'pdf-outline)
-    ;;add-to-list 'savehist-additional-variables 'pdf-view-register-alist   ;; ????
-  ;;(define-key pdf-view-mode-map (kbd "u") 'pdf-annot-add-underline-markup-annotation)
-  ;;(define-key pdf-view-mode-map (kbd "s") 'pdf-annot-add-squiggly-markup-annotation)
-  ;;(define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-strikeout-markup-annotation)
-  ;;  (kbd "m") #'bookmark-set     ; or your own wrapper
-  ;;  (kbd "'") #'bookmark-jump)
   )
 
 (require 'workgroups2)
