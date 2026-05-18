@@ -13,7 +13,6 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;;(setq create-lockfiles nil)
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 (require 'buffer-to-pdf)
 (setq buffer-to-pdf-directory (expand-file-name "~/Pictures/Emacs_buffer-to-pdf/"))
@@ -41,7 +40,7 @@
 ;; === ISEARCH custom behaviors START
 (setq isearch-allow-scroll t
       isearch-lazy-count t)
-(defun c-isearch-with-region ()                         ;; === INSTANT mark-all all after isearch
+(defun c-isearch-with-region ()                         
   "Use region as the isearch text."
   (when mark-active
     (let ((region (funcall region-extract-function nil)))
@@ -50,17 +49,16 @@
       (isearch-yank-string region))))
 (add-hook 'isearch-mode-hook #'c-isearch-with-region)
 
-(defun sexp-about-to-isearch ()                         ;; === +/ mark-sexp at cursor about to isearch
+(defun sexp-about-to-isearch ()                         
   "Use region as the isearch text."
   (if isearch-success
       (progn (mark-sexp))))
 (add-hook 'isearch-mode-hook #'sexp-about-to-isearch)
 
-(defun yankword-after-isearch ()                       ;; === ++/ just yank word, not from where isearch started
+(defun yankword-after-isearch ()                       
   "Copy the current isearch match to the kill ring."
   (interactive)
   (kill-ring-save isearch-other-end (point)))
-  ;;(isearch-exit))                                      ;; == ++// if we rather stay in isearch after yank word
 (define-key isearch-mode-map (kbd "M-w") #'yankword-after-isearch)
 
 (defun my/isearch-extend-right ()
@@ -76,10 +74,10 @@
 ;; === ISEACH custom behaviors DONE
 
 (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-(setq dumb-jump-force-searcher 'rg)                   ;; == LATEST config for dumb-jump_issue, slowness, FIX-restart_emacs
-
-(setq xref-show-definitions-function #'xref-show-definitions-completing-read)      ;; === NOT SURE YET WHICH TO HOLD ON TO
+(setq dumb-jump-force-searcher 'rg)                   
+(setq xref-show-definitions-function #'xref-show-definitions-completing-read)      
 (add-to-list 'xref-backend-functions 'dumb-jump-xref-activate t)
+
 (beacon-mode 1)
 (counsel-mode 1)
 (add-to-list 'load-path "/home/bryllepadilla/emacs-libvterm")
