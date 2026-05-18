@@ -51,6 +51,9 @@
 (add-hook 'isearch-mode-hook #'c-isearch-with-region)
 
 (defun sexp-about-to-isearch ()                         ;; === +/ mark-sexp at cursor about to isearch
+   ;; === REFER TO <C-M-SPC then M-B> then <C-M-u>
+      (progn (mark-sexp))))                             ;; === I NEED <C-s quick-search in --normal mode
+(add-hook 'isearch-mode-hook #'sexp-about-to-isearch)   ;; === potential to be disabled if 1st mark-sexp isn't holistic across file-types
   "Use region as the isearch text."
   (if isearch-success
       (progn (mark-sexp))))
@@ -87,6 +90,11 @@
 
 (setq ediff-split-window-function 'split-window-horizontally)
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
+(with-eval-after-load 'rg
+  (dolist (key '("C-o"))          ;; describe-function | rg-mode | <M-RET >> compilation-display-error
+    (define-key rg-mode-map (kbd key) nil))
+  )
 
 (global-set-key (kbd "M-h") 'windmove-left)
 (global-set-key (kbd "M-j") 'windmove-down)
@@ -197,12 +205,12 @@
 (global-set-key (kbd "M-4") 'tab-move)
 (global-set-key (kbd "M-p") 'scroll-down)
 (global-set-key (kbd "M-n") 'scroll-up)
-(global-set-key (kbd "C-M-d") 'evil-scroll-up)
+(global-set-key (kbd "C-M-c") 'evil-scroll-up)
 
 (with-eval-after-load 'evil
-  (dolist (key '("M-." "M-?" "C-f" "C-b" "C-r"))
+  (dolist (key '("M-." "M-?" "C-f" "C-b" "C-r" "C-p" "C-n"))
     (define-key evil-normal-state-map (kbd key) nil))
-  (dolist (key '("C-f" "C-b"))
+  (dolist (key '("C-f" "C-b" "C-M-d"))
     (define-key evil-motion-state-map (kbd key) nil))
   )
 
